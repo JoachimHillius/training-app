@@ -15,17 +15,31 @@ export default function LandingNav() {
           className="h-10 w-auto object-contain"
         />
       </Link>
+
+      {/* Center page links — hidden on small screens */}
+      <div className="hidden items-center gap-8 md:flex">
+        <Link href="/programs" className="text-sm font-medium text-white/70 transition-colors hover:text-white">
+          Programs
+        </Link>
+        <Link href="/workouts" className="text-sm font-medium text-white/70 transition-colors hover:text-white">
+          Workouts
+        </Link>
+        <Link href="/coach" className="text-sm font-medium text-white/70 transition-colors hover:text-white">
+          Coach
+        </Link>
+      </div>
+
       <div className="flex items-center gap-4">
         <ThemeToggle />
         <Link
           href="/auth/log-in"
-          className="text-sm font-medium text-white/80 hover:text-white transition-colors"
+          className="hidden text-sm font-medium text-white/80 transition-colors hover:text-white sm:inline"
         >
           Log in
         </Link>
         <Link
           href="/auth/sign-up"
-          className="rounded-full bg-accent px-5 py-2 text-sm font-bold text-dark-bg hover:bg-accent/90 transition-colors"
+          className="rounded-full bg-accent px-5 py-2 text-sm font-bold text-dark-bg transition-colors hover:bg-accent/90"
         >
           Get Started
         </Link>

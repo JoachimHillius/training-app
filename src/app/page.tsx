@@ -291,8 +291,8 @@ export default function LandingPage() {
           <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
             Get Started
           </span>
-          <h2 className="mx-auto mt-4 max-w-2xl font-display uppercase tracking-tight text-5xl leading-none sm:text-6xl">
-            First week on us.
+          <h2 className="mx-auto mt-4 max-w-3xl font-display uppercase tracking-tight text-5xl leading-none sm:text-6xl">
+            Start your Journey — Get to the Top
           </h2>
           <p className="mx-auto mt-6 max-w-lg text-lg text-white/60">
             No guesswork. No wasted sessions. Just a program built to move you
@@ -302,7 +302,7 @@ export default function LandingPage() {
             href="/auth/sign-up"
             className="mt-10 inline-block rounded-full bg-accent px-10 py-4 font-bold text-dark-bg transition-colors hover:bg-accent/90"
           >
-            Start for Free
+            Ready to Train Like a PRO
           </Link>
         </ScrollReveal>
       </section>
