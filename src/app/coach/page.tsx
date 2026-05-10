@@ -4,9 +4,9 @@ import { createClient } from '@/lib/supabase/server'
 import DashboardNav from '@/components/dashboard-nav'
 
 const stats = [
-  { value: '12+', label: 'Years coaching' },
-  { value: '8k', label: 'Clients trained' },
-  { value: '94%', label: 'Goal achievement' },
+  { value: '4×', label: 'CFR Qualifier' },
+  { value: '2×', label: 'Calgary Stampede' },
+  { value: '#21', label: 'PRCA World 2019' },
 ]
 
 const programs = [
@@ -30,6 +30,14 @@ const programs = [
     description:
       'Direct line to Pascal. Custom program built around your schedule, injuries, goals, and competition calendar.',
   },
+]
+
+const bio = [
+  'Pascal Isabelle is a professional bareback rider from Quebec, Canada, competing across Canada and the United States. Since moving to Alberta in 2015, he has built a respected career in professional rodeo through discipline, consistency, and dedication to the sport.',
+  'Pascal is a 4-time Canadian Finals Rodeo (CFR) qualifier, a 2-time Calgary Stampede qualifier, and a Reserve Champion at the WCRA Finals. In 2019, he finished 21st in the PRCA World Standings competing against the top bareback riders in the world.',
+  'After overcoming a major shoulder injury in 2023, Pascal committed himself to rebuilding both physically and mentally, returning stronger with a deeper understanding of athlete preparation, recovery, and longevity in rodeo.',
+  'Alongside his competitive career, Pascal is passionate about coaching and mentoring the next generation of rodeo athletes. His coaching focuses on bareback riding fundamentals, timing, movement, strength development, mental discipline, and building complete athletes both inside and outside the arena.',
+  "Pascal's mission is to help athletes maximize their potential while representing the sport of rodeo with professionalism, integrity, and respect.",
 ]
 
 export default async function CoachPage() {
@@ -57,15 +65,15 @@ export default async function CoachPage() {
         </div>
 
         {/* Bio */}
-        <div className="mb-16 grid items-center gap-12 lg:grid-cols-2">
-          <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl lg:mx-0">
+        <div className="mb-16 grid items-start gap-12 lg:grid-cols-2">
+          <div className="relative mx-auto aspect-[3/4] w-full max-w-md overflow-hidden rounded-2xl lg:mx-0">
             <Image
-              src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=800&q=80"
-              alt="Coach Pascal Isabelle"
+              src="/pascal-isabelle.jpg"
+              alt="Pascal Isabelle — Professional Bareback Rider"
               fill
               className="object-cover object-top"
+              priority
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-dark-bg/50 to-transparent" />
           </div>
 
           <div>
@@ -73,21 +81,22 @@ export default async function CoachPage() {
               Pascal Isabelle
             </h2>
             <p className="mt-1 font-medium text-white/50">
-              Head Coach · NSCA-CSCS · 12+ years training pros
+              Professional Bareback Rider · Coach · Quebec, Canada
             </p>
 
-            <p className="mt-6 text-lg leading-relaxed text-white/70">
-              Pascal has spent over a decade building elite athletes from the ground up.
-              His methodology focuses on sustainable performance — not flash, but
-              fundamentals that compound over time. Every program in ProGrip JP is
-              built on that foundation.
-            </p>
+            <div className="mt-6 space-y-4">
+              {bio.map((paragraph, i) => (
+                <p key={i} className="text-base leading-relaxed text-white/70">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
 
-            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-white/10 pt-10">
+            <div className="mt-10 grid grid-cols-3 gap-4 border-t border-white/10 pt-10">
               {stats.map((stat) => (
                 <div key={stat.label}>
                   <div className="text-3xl font-bold text-accent">{stat.value}</div>
-                  <div className="mt-1 text-sm text-white/50">{stat.label}</div>
+                  <div className="mt-1 text-xs text-white/50">{stat.label}</div>
                 </div>
               ))}
             </div>
