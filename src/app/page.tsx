@@ -83,13 +83,13 @@ export default function LandingPage() {
       <section className="relative flex min-h-screen flex-col">
         <div className="absolute inset-0 overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=80"
-            alt="Athlete training"
+            src="/Bareback_Rodeo_Webinar_with_ProGrip_JP.png"
+            alt="ProGrip JP training"
             fill
             className="object-cover object-center"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-dark-bg/60 via-dark-bg/40 to-dark-bg" />
+          <div className="absolute inset-0 bg-gradient-to-b from-dark-bg/80 via-dark-bg/75 to-dark-bg" />
         </div>
 
         <LandingNav />
