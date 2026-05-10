@@ -54,7 +54,7 @@ export default async function WorkoutDayPage({
 
         {/* Back link */}
         <Link
-          href="/dashboard"
+          href={`/dashboard/${program}`}
           className="mb-8 inline-flex items-center gap-2 rounded-full border border-accent px-5 py-2 text-sm font-semibold text-accent transition-colors hover:bg-accent/10"
         >
           ← Back

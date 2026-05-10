@@ -18,14 +18,33 @@ This is a **private workout app**, not a marketing website. Users receive login 
 - Pricing cards, intensity selectors, sales CTAs, or feature lists on the cover page
 
 ### 2. App side (after login — the real product)
-- `/dashboard` — assigned program + 7-day week grid with completion tracking
-- `/workout/[program]/[week]/[day]` — exercise list, notes, Mark Complete
-- `/admin` — coach assigns programs, manages users (gated by ADMIN_EMAIL env var)
+
+3-level navigation structure:
+
+**Level 1 — `/dashboard`** (program selector)
+- Shows 4 program cards: 10 Week Foundation, 3 Month Builder, 6 Month Elite, 1-on-1 Coaching
+- All 4 are clickable by any logged-in user (paywall via Stripe comes later — do NOT add access restrictions now)
+- Clicking a card → `/dashboard/[program]`
+
+**Level 2 — `/dashboard/[program]`** (week grid)
+- Shows the 7-day grid for the current week
+- `current_week` comes from profile only when `profile.assigned_program === program`; otherwise defaults to 1
+- "← Back to Programs" button → `/dashboard`
+
+**Level 3 — `/workout/[program]/[week]/[day]`** (workout detail)
+- Exercise table with Done checkboxes, notes, Mark Complete
+- "← Back" button → `/dashboard/[program]`
+
+**Other app pages:**
+- `/coach` — Meet the Coach (auth-protected, logged-in users only)
+- `/admin` — coach assigns programs and current_week per user (gated by ADMIN_EMAIL env var)
 
 ## How programs work
-Users **do not** choose their program on the public site. The coach assigns a program inside `/admin`. The user sees it after logging in on `/dashboard`.
+The coach assigns one program per user inside `/admin`. That sets `assigned_program` and `current_week` on the user's profile. Users can browse any program on the selector page, but only their assigned program tracks week progress automatically.
+
+**Future:** When Stripe is integrated, restrict program access based on purchase. Currently all users see all 4 programs.
 
 ## Route groups
 - `src/app/(app)/` — auth pages (log-in, sign-up, account). Gets `<Nav />` from its layout.
-- `src/app/dashboard/`, `src/app/workout/`, `src/app/admin/` — app pages at root level. Each imports `<DashboardNav />` directly.
+- `src/app/dashboard/`, `src/app/dashboard/[program]/`, `src/app/workout/`, `src/app/admin/`, `src/app/coach/` — app pages at root level. Each imports `<DashboardNav />` directly.
 - `src/app/page.tsx` — public cover page. Uses `<LandingNav />`.

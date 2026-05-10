@@ -30,6 +30,12 @@ export default function DashboardNav({
           >
             Dashboard
           </Link>
+          <Link
+            href="/coach"
+            className="text-sm font-medium text-white/70 transition-colors hover:text-white"
+          >
+            Meet the Coach
+          </Link>
           {isAdmin && (
             <Link
               href="/admin"
