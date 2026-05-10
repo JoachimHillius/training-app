@@ -36,7 +36,7 @@ export default function LandingPage() {
             ProGrip JP
           </span>
           <h1
-            className="animate-fade-up mt-4 font-display uppercase tracking-tight text-5xl leading-none sm:text-7xl lg:text-8xl"
+            className="animate-fade-up mt-4 font-display uppercase tracking-tight text-4xl leading-none sm:text-7xl lg:text-8xl"
             style={{ animationDelay: '120ms' }}
           >
             Train. Sweat. Grip.

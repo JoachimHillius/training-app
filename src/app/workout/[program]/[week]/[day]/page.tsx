@@ -54,9 +54,9 @@ export default async function WorkoutDayPage({
         {/* Back link */}
         <Link
           href="/dashboard"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-white/50 transition-colors hover:text-white"
+          className="mb-8 inline-flex items-center gap-2 rounded-full border border-accent px-5 py-2 text-sm font-semibold text-accent transition-colors hover:bg-accent/10"
         >
-          ← Back to Dashboard
+          ← Back
         </Link>
 
         {/* Saved banner */}
@@ -94,7 +94,7 @@ export default async function WorkoutDayPage({
           </div>
         ) : (
           /* Exercise table */
-          <div className="mb-8 overflow-hidden rounded-2xl border border-white/10">
+          <div className="mb-8 overflow-x-auto rounded-2xl border border-white/10">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/10 bg-white/5">
