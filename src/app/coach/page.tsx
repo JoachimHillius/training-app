@@ -68,7 +68,7 @@ export default async function CoachPage() {
         <div className="mb-16 grid items-start gap-12 lg:grid-cols-2">
           <div className="relative mx-auto aspect-[3/4] w-full max-w-md overflow-hidden rounded-2xl lg:mx-0">
             <Image
-              src="/pascal-isabelle.jpg"
+              src="/pascal-isabelle.png"
               alt="Pascal Isabelle — Professional Bareback Rider"
               fill
               className="object-cover object-top"
