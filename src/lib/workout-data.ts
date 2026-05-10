@@ -1,3 +1,5 @@
+// Placeholder cycling templates for 3_month, 6_month, 1on1 programs. The real 10_week program now lives in ten-week-plan.ts.
+
 export type Exercise = {
   name: string
   sets: string

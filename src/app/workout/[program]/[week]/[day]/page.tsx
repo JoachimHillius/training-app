@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import DashboardNav from '@/components/dashboard-nav'
 import { saveWorkoutDay } from '@/app/actions/workout'
 import { PROGRAM_META, DAY_NAMES, getWorkoutForDay } from '@/lib/workout-data'
+import { getWorkout, TEN_WEEK_PLAN } from '@/lib/ten-week-plan'
 import ExerciseTable from '@/components/exercise-table'
 
 export default async function WorkoutDayPage({
@@ -25,16 +26,18 @@ export default async function WorkoutDayPage({
   const dayNum = parseInt(day, 10)
   const isAdmin = user.email === process.env.ADMIN_EMAIL
 
-  // Validate params
   if (isNaN(weekNum) || isNaN(dayNum) || dayNum < 1 || dayNum > 7) {
     redirect('/dashboard')
   }
 
-  const workout = getWorkoutForDay(dayNum)
+  const isTenWeek = program === '10_week'
   const programMeta = PROGRAM_META[program]
   const isRestDay = dayNum === 7
 
-  // Fetch existing completion for this day
+  const tenWeekDay = isTenWeek ? getWorkout(weekNum, dayNum) : null
+  const tenWeekPlan = isTenWeek ? TEN_WEEK_PLAN.find((w) => w.weekNumber === weekNum) : null
+  const legacyWorkout = !isTenWeek ? getWorkoutForDay(dayNum) : null
+
   const { data: completion } = await supabase
     .from('day_completions')
     .select('*')
@@ -68,39 +71,93 @@ export default async function WorkoutDayPage({
         )}
 
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex flex-wrap items-center gap-3 text-sm text-white/40">
-            <span>{programMeta?.label ?? program}</span>
-            <span>·</span>
-            <span>Week {weekNum}</span>
-            <span>·</span>
-            <span>{DAY_NAMES[dayNum - 1]}</span>
+        {isTenWeek ? (
+          <div className="mb-8">
+            {tenWeekPlan && (
+              <p className="mb-1 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
+                Week {weekNum}: {tenWeekPlan.title}
+              </p>
+            )}
+            <h1 className="font-display text-5xl uppercase tracking-tight">
+              Day {dayNum}
+            </h1>
+            {!isRestDay && tenWeekDay && (
+              <p className="mt-2 text-lg text-white/60">{tenWeekDay.focus}</p>
+            )}
+            {isCompleted && (
+              <p className="mt-2 text-sm font-medium text-accent">✓ Completed</p>
+            )}
           </div>
-          <h1 className="mt-3 font-display text-5xl uppercase tracking-tight">
-            {workout.title}
-          </h1>
-          {isCompleted && (
-            <p className="mt-2 text-sm font-medium text-accent">✓ Completed</p>
-          )}
-        </div>
+        ) : (
+          <div className="mb-8">
+            <div className="flex flex-wrap items-center gap-3 text-sm text-white/40">
+              <span>{programMeta?.label ?? program}</span>
+              <span>·</span>
+              <span>Week {weekNum}</span>
+              <span>·</span>
+              <span>{DAY_NAMES[dayNum - 1]}</span>
+            </div>
+            <h1 className="mt-3 font-display text-5xl uppercase tracking-tight">
+              {legacyWorkout?.title ?? 'Workout'}
+            </h1>
+            {isCompleted && (
+              <p className="mt-2 text-sm font-medium text-accent">✓ Completed</p>
+            )}
+          </div>
+        )}
 
         {/* Rest day message */}
         {isRestDay ? (
           <div className="mb-8 rounded-2xl border border-white/10 bg-white/5 p-6 text-white/70">
             <p className="text-lg font-medium">Rest day.</p>
             <p className="mt-2 text-sm">
-              Use today to recover — or, if you missed a session earlier this week,
-              use it as a makeup day. Your body grows between sessions, not during them.
+              {isTenWeek && tenWeekDay?.notes
+                ? tenWeekDay.notes
+                : 'Use today to recover — or, if you missed a session earlier this week, use it as a makeup day. Your body grows between sessions, not during them.'}
             </p>
           </div>
         ) : (
-          <ExerciseTable
-            exercises={workout.exercises}
-            initialCompleted={(completion?.exercises_completed as number[]) ?? []}
-            programType={program}
-            week={weekNum}
-            day={dayNum}
-          />
+          <>
+            {isTenWeek && tenWeekDay ? (
+              <ExerciseTable
+                exercises={tenWeekDay.exercises}
+                initialCompleted={(completion?.exercises_completed as number[]) ?? []}
+                programType={program}
+                week={weekNum}
+                day={dayNum}
+                dayRest={tenWeekDay.rest}
+                variant="ten-week"
+              />
+            ) : (
+              <ExerciseTable
+                exercises={legacyWorkout?.exercises ?? []}
+                initialCompleted={(completion?.exercises_completed as number[]) ?? []}
+                programType={program}
+                week={weekNum}
+                day={dayNum}
+              />
+            )}
+
+            {/* Conditioning block (10_week only) */}
+            {isTenWeek && tenWeekDay?.conditioning && (
+              <div className="mb-4 rounded-xl border border-white/10 bg-white/5 px-5 py-4">
+                <p className="mb-1 text-xs font-bold uppercase tracking-[0.2em] text-accent">
+                  Conditioning
+                </p>
+                <p className="text-sm text-white/80">{tenWeekDay.conditioning}</p>
+              </div>
+            )}
+
+            {/* Execution notes (10_week only) */}
+            {isTenWeek && tenWeekDay?.notes && (
+              <div className="mb-8 rounded-xl border border-white/10 bg-white/5 px-5 py-4">
+                <p className="mb-1 text-xs font-bold uppercase tracking-[0.2em] text-accent">
+                  Execution Notes
+                </p>
+                <p className="text-sm italic text-white/60">{tenWeekDay.notes}</p>
+              </div>
+            )}
+          </>
         )}
 
         {/* Notes + Mark Complete form */}

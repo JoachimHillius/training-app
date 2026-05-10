@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import DashboardNav from '@/components/dashboard-nav'
 import { PROGRAM_META, DAY_NAMES, getWorkoutForDay } from '@/lib/workout-data'
+import { TEN_WEEK_PLAN, TEN_WEEK_TOTAL_WEEKS } from '@/lib/ten-week-plan'
 
 export default async function ProgramDashboardPage({
   params,
@@ -20,18 +21,17 @@ export default async function ProgramDashboardPage({
   const programMeta = PROGRAM_META[program]
   if (!programMeta) redirect('/dashboard')
 
-  // Fetch profile to check if this is the assigned program
+  const isTenWeek = program === '10_week'
+
   const { data: profile } = await supabase
     .from('profiles')
     .select('assigned_program, current_week')
     .eq('user_id', user.id)
     .maybeSingle()
 
-  // Use assigned week only when this is the user's assigned program
   const currentWeek =
     profile?.assigned_program === program ? (profile?.current_week ?? 1) : 1
 
-  // Fetch completions for this program + week
   const { data: completions } = await supabase
     .from('day_completions')
     .select('day_number')
@@ -40,6 +40,11 @@ export default async function ProgramDashboardPage({
     .eq('week_number', currentWeek)
 
   const completedDays = new Set(completions?.map((c) => c.day_number) ?? [])
+
+  const totalWeeks = isTenWeek ? TEN_WEEK_TOTAL_WEEKS : programMeta.totalWeeks
+  const tenWeekPlan = isTenWeek
+    ? TEN_WEEK_PLAN.find((w) => w.weekNumber === currentWeek)
+    : null
 
   return (
     <div className="min-h-screen bg-dark-bg text-white">
@@ -64,22 +69,32 @@ export default async function ProgramDashboardPage({
             {programMeta.label}
           </h1>
           <p className="mt-1 text-white/50">
-            Week {currentWeek} of {programMeta.totalWeeks}
+            Week {currentWeek} of {totalWeeks}
           </p>
         </div>
 
         {/* 7-day week grid */}
         <div>
-          <h2 className="mb-5 font-display text-2xl uppercase tracking-tight text-white/80">
-            Week {currentWeek} — Daily Plan
-          </h2>
+          <div className="mb-5">
+            <h2 className="font-display text-2xl uppercase tracking-tight text-white/80">
+              Week {currentWeek} — Daily Plan
+            </h2>
+            {tenWeekPlan && (
+              <p className="mt-1 text-sm text-white/40">{tenWeekPlan.title}</p>
+            )}
+          </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
             {Array.from({ length: 7 }, (_, i) => {
               const dayNumber = i + 1
               const dayName = DAY_NAMES[i]
               const isRest = dayNumber === 7
               const isCompleted = completedDays.has(dayNumber)
-              const workout = getWorkoutForDay(dayNumber)
+
+              const dayLabel = isRest
+                ? 'Rest / Makeup'
+                : isTenWeek
+                  ? (tenWeekPlan?.days.find((d) => d.day === dayNumber)?.focus ?? '—')
+                  : getWorkoutForDay(dayNumber).title
 
               return (
                 <Link
@@ -102,7 +117,7 @@ export default async function ProgramDashboardPage({
                     )}
                   </div>
                   <p className="text-sm font-semibold leading-snug">
-                    {isRest ? 'Rest / Makeup' : workout.title}
+                    {dayLabel}
                   </p>
                   <p className="mt-auto pt-3 text-xs text-white/30">
                     Day {dayNumber}
