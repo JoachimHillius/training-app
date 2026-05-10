@@ -102,7 +102,7 @@ export default function LandingPage() {
             ProGrip JP
           </span>
           <h1
-            className="animate-fade-up mt-4 text-5xl font-bold leading-tight tracking-tight sm:text-6xl lg:text-7xl"
+            className="animate-fade-up mt-4 font-display uppercase tracking-tight text-5xl leading-none sm:text-7xl lg:text-8xl"
             style={{ animationDelay: '120ms' }}
           >
             Train. Sweat. Grip.
@@ -148,7 +148,7 @@ export default function LandingPage() {
       <section id="programs" className="px-6 py-28 sm:px-12 lg:px-20">
         <ScrollReveal className="text-center mb-16">
           <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">Programs</span>
-          <h2 className="mt-3 text-4xl font-bold sm:text-5xl">Choose your plan</h2>
+          <h2 className="mt-3 font-display uppercase tracking-tight text-5xl leading-none sm:text-6xl">Choose your plan</h2>
           <p className="mt-4 text-lg text-white/60">
             Dial the intensity. Show up. The rest follows.
           </p>
@@ -204,7 +204,7 @@ export default function LandingPage() {
       <section id="workouts" className="px-6 py-28 sm:px-12 lg:px-20">
         <ScrollReveal className="text-center mb-16">
           <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">Workouts</span>
-          <h2 className="mt-3 text-4xl font-bold sm:text-5xl">Every session counts</h2>
+          <h2 className="mt-3 font-display uppercase tracking-tight text-5xl leading-none sm:text-6xl">Every session counts</h2>
           <p className="mt-4 text-lg text-white/60">
             Updated weekly. Built to adapt to your level.
           </p>
@@ -250,7 +250,7 @@ export default function LandingPage() {
           <ScrollReveal delay={150}>
             <div>
               <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">The Coach</span>
-              <h2 className="mt-3 text-4xl font-bold sm:text-5xl">Pascal Isabelle</h2>
+              <h2 className="mt-3 font-display uppercase tracking-tight text-5xl leading-none sm:text-6xl">Pascal Isabelle</h2>
               <p className="mt-2 font-medium text-white/50">
                 Head Coach · NSCA-CSCS · 12+ years training pros
               </p>
@@ -291,7 +291,7 @@ export default function LandingPage() {
           <span className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
             Get Started
           </span>
-          <h2 className="mx-auto mt-4 max-w-2xl text-4xl font-bold sm:text-5xl">
+          <h2 className="mx-auto mt-4 max-w-2xl font-display uppercase tracking-tight text-5xl leading-none sm:text-6xl">
             First week on us.
           </h2>
           <p className="mx-auto mt-6 max-w-lg text-lg text-white/60">

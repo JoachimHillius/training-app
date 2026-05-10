@@ -7,6 +7,7 @@
   --color-accent: #e5ab3a;
   --color-dark-bg: #191a1b;
   --animate-fade-up: fade-up 0.8s ease both;
+  --font-display: var(--font-bebas);
 }
 
 @keyframes fade-up {
