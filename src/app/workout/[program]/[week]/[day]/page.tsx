@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import DashboardNav from '@/components/dashboard-nav'
 import { saveWorkoutDay } from '@/app/actions/workout'
 import { PROGRAM_META, DAY_NAMES, getWorkoutForDay } from '@/lib/workout-data'
+import ExerciseTable from '@/components/exercise-table'
 
 export default async function WorkoutDayPage({
   params,
@@ -93,32 +94,13 @@ export default async function WorkoutDayPage({
             </p>
           </div>
         ) : (
-          /* Exercise table */
-          <div className="mb-8 overflow-x-auto rounded-2xl border border-white/10">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-white/10 bg-white/5">
-                  <th className="px-5 py-3 text-left font-semibold text-white/50">Exercise</th>
-                  <th className="px-4 py-3 text-center font-semibold text-white/50">Sets</th>
-                  <th className="px-4 py-3 text-center font-semibold text-white/50">Reps</th>
-                  <th className="px-4 py-3 text-center font-semibold text-white/50">Rest</th>
-                </tr>
-              </thead>
-              <tbody>
-                {workout.exercises.map((ex, i) => (
-                  <tr
-                    key={ex.name}
-                    className={`border-b border-white/5 ${i % 2 === 0 ? '' : 'bg-white/[0.02]'}`}
-                  >
-                    <td className="px-5 py-4 font-medium">{ex.name}</td>
-                    <td className="px-4 py-4 text-center text-white/70">{ex.sets}</td>
-                    <td className="px-4 py-4 text-center text-white/70">{ex.reps}</td>
-                    <td className="px-4 py-4 text-center text-white/70">{ex.rest}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ExerciseTable
+            exercises={workout.exercises}
+            initialCompleted={(completion?.exercises_completed as number[]) ?? []}
+            programType={program}
+            week={weekNum}
+            day={dayNum}
+          />
         )}
 
         {/* Notes + Mark Complete form */}

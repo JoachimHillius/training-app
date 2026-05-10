@@ -44,3 +44,49 @@ export async function saveWorkoutDay(formData: FormData) {
     `/workout/${programType}/${weekNumber}/${dayNumber}?saved=1`
   )
 }
+
+export async function toggleExerciseComplete(
+  programType: string,
+  week: number,
+  day: number,
+  exerciseIndex: number,
+  isComplete: boolean,
+) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  const { data: existing } = await supabase
+    .from('day_completions')
+    .select('id, exercises_completed')
+    .eq('user_id', user.id)
+    .eq('program_type', programType)
+    .eq('week_number', week)
+    .eq('day_number', day)
+    .maybeSingle()
+
+  let exercisesCompleted: number[] = (existing?.exercises_completed as number[]) ?? []
+
+  if (isComplete) {
+    if (!exercisesCompleted.includes(exerciseIndex)) {
+      exercisesCompleted = [...exercisesCompleted, exerciseIndex]
+    }
+  } else {
+    exercisesCompleted = exercisesCompleted.filter((i) => i !== exerciseIndex)
+  }
+
+  if (existing) {
+    await supabase
+      .from('day_completions')
+      .update({ exercises_completed: exercisesCompleted })
+      .eq('id', existing.id)
+  } else {
+    await supabase.from('day_completions').insert({
+      user_id: user.id,
+      program_type: programType,
+      week_number: week,
+      day_number: day,
+      exercises_completed: exercisesCompleted,
+    })
+  }
+}
