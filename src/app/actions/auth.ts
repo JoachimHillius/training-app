@@ -15,7 +15,7 @@ export async function signUp(formData: FormData) {
     redirect(`/auth/sign-up?error=${encodeURIComponent(error.message)}`)
   }
 
-  redirect('/account')
+  redirect('/dashboard?welcome=1')
 }
 
 export async function signIn(formData: FormData) {
@@ -30,7 +30,7 @@ export async function signIn(formData: FormData) {
     redirect(`/auth/log-in?error=${encodeURIComponent(error.message)}`)
   }
 
-  redirect('/account')
+  redirect('/dashboard')
 }
 
 export async function signOut() {
