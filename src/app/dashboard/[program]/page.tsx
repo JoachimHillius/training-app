@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import DashboardNav from '@/components/dashboard-nav'
 import { PROGRAM_META, DAY_NAMES, getWorkoutForDay } from '@/lib/workout-data'
 import { TEN_WEEK_PLAN, TEN_WEEK_TOTAL_WEEKS } from '@/lib/ten-week-plan'
+import WeekAccordion, { type WeekData } from '@/components/week-accordion'
 
 export default async function ProgramDashboardPage({
   params,
@@ -22,6 +23,7 @@ export default async function ProgramDashboardPage({
   if (!programMeta) redirect('/dashboard')
 
   const isTenWeek = program === '10_week'
+  const totalWeeks = isTenWeek ? TEN_WEEK_TOTAL_WEEKS : programMeta.totalWeeks
 
   const { data: profile } = await supabase
     .from('profiles')
@@ -32,19 +34,70 @@ export default async function ProgramDashboardPage({
   const currentWeek =
     profile?.assigned_program === program ? (profile?.current_week ?? 1) : 1
 
-  const { data: completions } = await supabase
+  // Fetch all completions for this user + program in one query
+  const { data: allCompletions } = await supabase
     .from('day_completions')
-    .select('day_number')
+    .select('week_number, day_number')
     .eq('user_id', user.id)
     .eq('program_type', program)
-    .eq('week_number', currentWeek)
 
-  const completedDays = new Set(completions?.map((c) => c.day_number) ?? [])
+  // Group by week
+  const completionsByWeek = new Map<number, Set<number>>()
+  for (const row of allCompletions ?? []) {
+    if (!completionsByWeek.has(row.week_number)) {
+      completionsByWeek.set(row.week_number, new Set())
+    }
+    completionsByWeek.get(row.week_number)!.add(row.day_number)
+  }
 
-  const totalWeeks = isTenWeek ? TEN_WEEK_TOTAL_WEEKS : programMeta.totalWeeks
-  const tenWeekPlan = isTenWeek
-    ? TEN_WEEK_PLAN.find((w) => w.weekNumber === currentWeek)
-    : null
+  // Sequential unlock: week 1 always unlocked, week N+1 unlocked if week N has 7 days
+  const unlockedSet = new Set<number>([1])
+  for (let w = 1; w < totalWeeks; w++) {
+    if ((completionsByWeek.get(w)?.size ?? 0) >= 7) {
+      unlockedSet.add(w + 1)
+    } else {
+      break
+    }
+  }
+  if (isAdmin) {
+    for (let w = 1; w <= totalWeeks; w++) unlockedSet.add(w)
+  }
+
+  // Build serializable week data for the client component
+  const weeks: WeekData[] = Array.from({ length: totalWeeks }, (_, i) => {
+    const weekNumber = i + 1
+    const tenWeekWeek = isTenWeek
+      ? TEN_WEEK_PLAN.find((w) => w.weekNumber === weekNumber)
+      : null
+    const completedDaysSet = completionsByWeek.get(weekNumber) ?? new Set<number>()
+
+    const days = Array.from({ length: 7 }, (_, j) => {
+      const dayNumber = j + 1
+      const isRest = dayNumber === 7
+      const label = isRest
+        ? 'Rest / Makeup'
+        : isTenWeek
+          ? (tenWeekWeek?.days.find((d) => d.day === dayNumber)?.focus ?? '—')
+          : getWorkoutForDay(dayNumber).title
+
+      return {
+        dayNumber,
+        dayName: DAY_NAMES[j],
+        label,
+        isCompleted: completedDaysSet.has(dayNumber),
+        isRest,
+      }
+    })
+
+    return {
+      weekNumber,
+      title: tenWeekWeek?.title ?? '',
+      days,
+      isCompleted: completedDaysSet.size >= 7,
+      isUnlocked: unlockedSet.has(weekNumber),
+      isCurrent: weekNumber === currentWeek,
+    }
+  })
 
   return (
     <div className="min-h-screen bg-dark-bg text-white">
@@ -52,7 +105,6 @@ export default async function ProgramDashboardPage({
 
       <div className="mx-auto max-w-5xl px-6 py-12 sm:px-10">
 
-        {/* Back link */}
         <Link
           href="/dashboard"
           className="mb-8 inline-flex items-center gap-2 rounded-full border border-accent px-5 py-2 text-sm font-semibold text-accent transition-colors hover:bg-accent/10"
@@ -60,7 +112,6 @@ export default async function ProgramDashboardPage({
           ← Back to Programs
         </Link>
 
-        {/* Header */}
         <div className="mb-10">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
             Your Training
@@ -73,60 +124,7 @@ export default async function ProgramDashboardPage({
           </p>
         </div>
 
-        {/* 7-day week grid */}
-        <div>
-          <div className="mb-5">
-            <h2 className="font-display text-2xl uppercase tracking-tight text-white/80">
-              Week {currentWeek} — Daily Plan
-            </h2>
-            {tenWeekPlan && (
-              <p className="mt-1 text-sm text-white/40">{tenWeekPlan.title}</p>
-            )}
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
-            {Array.from({ length: 7 }, (_, i) => {
-              const dayNumber = i + 1
-              const dayName = DAY_NAMES[i]
-              const isRest = dayNumber === 7
-              const isCompleted = completedDays.has(dayNumber)
-
-              const dayLabel = isRest
-                ? 'Rest / Makeup'
-                : isTenWeek
-                  ? (tenWeekPlan?.days.find((d) => d.day === dayNumber)?.focus ?? '—')
-                  : getWorkoutForDay(dayNumber).title
-
-              return (
-                <Link
-                  key={dayNumber}
-                  href={`/workout/${program}/${currentWeek}/${dayNumber}`}
-                  className={`group flex flex-col rounded-xl border p-4 transition-all hover:-translate-y-0.5 ${
-                    isCompleted
-                      ? 'border-accent/40 bg-accent/10'
-                      : isRest
-                        ? 'border-white/10 bg-white/5 opacity-70'
-                        : 'border-white/10 bg-white/5 hover:border-white/20'
-                  }`}
-                >
-                  <div className="mb-2 flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-widest text-white/40">
-                      {dayName.slice(0, 3)}
-                    </span>
-                    {isCompleted && (
-                      <span className="text-sm text-accent">✓</span>
-                    )}
-                  </div>
-                  <p className="text-sm font-semibold leading-snug">
-                    {dayLabel}
-                  </p>
-                  <p className="mt-auto pt-3 text-xs text-white/30">
-                    Day {dayNumber}
-                  </p>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
+        <WeekAccordion weeks={weeks} program={program} currentWeek={currentWeek} />
 
       </div>
     </div>

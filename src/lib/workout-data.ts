@@ -13,16 +13,16 @@ export type DayWorkout = {
 }
 
 export const PROGRAM_META: Record<string, { label: string; totalWeeks: number }> = {
-  '10_week': { label: '10 Week Foundation', totalWeeks: 10 },
-  '3_month': { label: '3 Month Builder', totalWeeks: 12 },
-  '6_month': { label: '6 Month Elite 1-on-1', totalWeeks: 24 },
+  '10_week': { label: '10 Week Training', totalWeeks: 10 },
+  '3_month': { label: '3 Month Training', totalWeeks: 12 },
+  '6_month': { label: '6 Month Training', totalWeeks: 24 },
   '1on1': { label: '1-on-1 Coaching', totalWeeks: 24 },
 }
 
 export const PROGRAM_OPTIONS = [
-  { value: '10_week', label: '10 Week Foundation' },
-  { value: '3_month', label: '3 Month Builder' },
-  { value: '6_month', label: '6 Month Elite 1-on-1' },
+  { value: '10_week', label: '10 Week Training' },
+  { value: '3_month', label: '3 Month Training' },
+  { value: '6_month', label: '6 Month Training' },
   { value: '1on1', label: '1-on-1 Coaching' },
 ]
 

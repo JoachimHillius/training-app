@@ -18,15 +18,25 @@ export default async function AdminPage({
 
   const { saved } = await searchParams
 
-  // Use service-role client to bypass RLS
   const adminClient = createAdminClient()
 
-  const [{ data: authData, error: usersError }, { data: profiles }] = await Promise.all([
-    adminClient.auth.admin.listUsers({ page: 1, perPage: 1000 }),
-    adminClient.from('profiles').select('*'),
-  ])
+  const [{ data: authData, error: usersError }, { data: profiles }, { data: completions }] =
+    await Promise.all([
+      adminClient.auth.admin.listUsers({ page: 1, perPage: 1000 }),
+      adminClient.from('profiles').select('*'),
+      adminClient
+        .from('day_completions')
+        .select('user_id, program_type, week_number, day_number'),
+    ])
 
   const users = authData?.users ?? []
+
+  // Count days completed per user+program+week
+  const completionCounts = new Map<string, number>()
+  for (const c of completions ?? []) {
+    const key = `${c.user_id}:${c.program_type}:${c.week_number}`
+    completionCounts.set(key, (completionCounts.get(key) ?? 0) + 1)
+  }
 
   const rows = users.map((u) => ({
     id: u.id,
@@ -60,60 +70,70 @@ export default async function AdminPage({
         )}
 
         <div className="space-y-3">
-          {rows.map((row) => (
-            <form
-              key={row.id}
-              action={assignProgram}
-              className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 sm:flex-row sm:items-center"
-            >
-              <input type="hidden" name="user_id" value={row.id} />
+          {rows.map((row) => {
+            const profile = row.profile
+            const daysCompleted =
+              profile?.assigned_program && profile?.current_week
+                ? (completionCounts.get(
+                    `${row.id}:${profile.assigned_program}:${profile.current_week}`,
+                  ) ?? 0)
+                : 0
 
-              <div className="flex-1 min-w-0">
-                <p className="truncate text-sm font-medium">{row.email}</p>
-                <p className="mt-0.5 text-xs text-white/30">
-                  {row.profile
-                    ? `Week ${row.profile.current_week} · ${row.profile.assigned_program ?? 'no program'}`
-                    : 'No profile yet'}
-                </p>
-              </div>
+            return (
+              <form
+                key={row.id}
+                action={assignProgram}
+                className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 sm:flex-row sm:items-center"
+              >
+                <input type="hidden" name="user_id" value={row.id} />
 
-              <div className="flex flex-wrap items-center gap-3">
-                {/* Program dropdown */}
-                <select
-                  name="assigned_program"
-                  defaultValue={row.profile?.assigned_program ?? ''}
-                  className="rounded-xl border border-white/20 bg-dark-bg px-3 py-2 text-sm text-white focus:border-accent focus:outline-none"
-                >
-                  <option value="">No program</option>
-                  {PROGRAM_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value} className="bg-dark-bg">
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-
-                {/* Current week */}
-                <div className="flex items-center gap-2">
-                  <label className="text-xs text-white/40">Week</label>
-                  <input
-                    type="number"
-                    name="current_week"
-                    min={1}
-                    max={24}
-                    defaultValue={row.profile?.current_week ?? 1}
-                    className="w-16 rounded-xl border border-white/20 bg-dark-bg px-3 py-2 text-sm text-white focus:border-accent focus:outline-none"
-                  />
+                <div className="flex-1 min-w-0">
+                  <p className="truncate text-sm font-medium">{row.email}</p>
+                  <p className="mt-0.5 text-xs text-white/30">
+                    {profile
+                      ? profile.assigned_program
+                        ? `Week ${profile.current_week} (${daysCompleted}/7 days done) · ${profile.assigned_program}`
+                        : 'No program assigned'
+                      : 'No profile yet'}
+                  </p>
                 </div>
 
-                <button
-                  type="submit"
-                  className="rounded-full bg-accent px-5 py-2 text-sm font-bold text-dark-bg transition-colors hover:bg-accent/90"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          ))}
+                <div className="flex flex-wrap items-center gap-3">
+                  <select
+                    name="assigned_program"
+                    defaultValue={profile?.assigned_program ?? ''}
+                    className="rounded-xl border border-white/20 bg-dark-bg px-3 py-2 text-sm text-white focus:border-accent focus:outline-none"
+                  >
+                    <option value="">No program</option>
+                    {PROGRAM_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value} className="bg-dark-bg">
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+
+                  <div className="flex items-center gap-2">
+                    <label className="text-xs text-white/40">Week</label>
+                    <input
+                      type="number"
+                      name="current_week"
+                      min={1}
+                      max={24}
+                      defaultValue={profile?.current_week ?? 1}
+                      className="w-16 rounded-xl border border-white/20 bg-dark-bg px-3 py-2 text-sm text-white focus:border-accent focus:outline-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="rounded-full bg-accent px-5 py-2 text-sm font-bold text-dark-bg transition-colors hover:bg-accent/90"
+                  >
+                    Save
+                  </button>
+                </div>
+              </form>
+            )
+          })}
 
           {rows.length === 0 && !usersError && (
             <p className="text-sm text-white/40">No users found.</p>

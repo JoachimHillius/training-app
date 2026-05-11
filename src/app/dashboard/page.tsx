@@ -6,21 +6,21 @@ import DashboardNav from '@/components/dashboard-nav'
 const PROGRAM_CARDS = [
   {
     value: '10_week',
-    name: '10 Week Foundation',
+    name: '10 Week Training',
     weeks: 10,
     description:
       'Build your bareback rodeo base. Grip strength, hip power, and stability from the ground up.',
   },
   {
     value: '3_month',
-    name: '3 Month Builder',
+    name: '3 Month Training',
     weeks: 12,
     description:
       'Periodized progression for athletes ready to push harder. Three phases, one goal.',
   },
   {
     value: '6_month',
-    name: '6 Month Elite',
+    name: '6 Month Training',
     weeks: 24,
     description:
       'Advanced programming for competitors. Full-season prep with peaking protocol.',

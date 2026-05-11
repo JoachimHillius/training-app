@@ -2,6 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { PROGRAM_META } from '@/lib/workout-data'
 
 export async function saveWorkoutDay(formData: FormData) {
   const supabase = await createClient()
@@ -38,6 +39,36 @@ export async function saveWorkoutDay(formData: FormData) {
       notes_text: notesText,
       completed_at: new Date().toISOString(),
     })
+
+    // Auto-advance current_week when all 7 days of the current week are done
+    const { count } = await supabase
+      .from('day_completions')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .eq('program_type', programType)
+      .eq('week_number', weekNumber)
+
+    if (count === 7) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('assigned_program, current_week')
+        .eq('user_id', user.id)
+        .maybeSingle()
+
+      if (
+        profile?.assigned_program === programType &&
+        profile.current_week === weekNumber
+      ) {
+        const totalWeeks = PROGRAM_META[programType]?.totalWeeks ?? 10
+        const nextWeek = weekNumber + 1
+        if (nextWeek <= totalWeeks) {
+          await supabase
+            .from('profiles')
+            .update({ current_week: nextWeek })
+            .eq('user_id', user.id)
+        }
+      }
+    }
   }
 
   redirect(
