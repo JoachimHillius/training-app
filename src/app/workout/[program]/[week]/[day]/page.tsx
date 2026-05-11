@@ -81,8 +81,11 @@ export default async function WorkoutDayPage({
             <h1 className="font-display text-5xl uppercase tracking-tight">
               Day {dayNum}
             </h1>
+            {tenWeekDay?.dayName && (
+              <p className="mt-1 text-sm text-white/40">{tenWeekDay.dayName}</p>
+            )}
             {!isRestDay && tenWeekDay && (
-              <p className="mt-2 text-lg text-white/60">{tenWeekDay.focus}</p>
+              <p className="mt-2 text-lg font-semibold text-white">{tenWeekDay.focus}</p>
             )}
             {isCompleted && (
               <p className="mt-2 text-sm font-medium text-accent">✓ Completed</p>
@@ -141,7 +144,7 @@ export default async function WorkoutDayPage({
             {/* Conditioning block (10_week only) */}
             {isTenWeek && tenWeekDay?.conditioning && (
               <div className="mb-4 rounded-xl border border-white/10 bg-white/5 px-5 py-4">
-                <p className="mb-1 text-xs font-bold uppercase tracking-[0.2em] text-accent">
+                <p className="mb-2 font-display text-sm uppercase tracking-[0.2em] text-accent">
                   Conditioning
                 </p>
                 <p className="text-sm text-white/80">{tenWeekDay.conditioning}</p>
@@ -151,7 +154,7 @@ export default async function WorkoutDayPage({
             {/* Execution notes (10_week only) */}
             {isTenWeek && tenWeekDay?.notes && (
               <div className="mb-8 rounded-xl border border-white/10 bg-white/5 px-5 py-4">
-                <p className="mb-1 text-xs font-bold uppercase tracking-[0.2em] text-accent">
+                <p className="mb-2 font-display text-sm uppercase tracking-[0.2em] text-accent">
                   Execution Notes
                 </p>
                 <p className="text-sm italic text-white/60">{tenWeekDay.notes}</p>

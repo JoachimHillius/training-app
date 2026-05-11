@@ -48,3 +48,8 @@ The coach assigns one program per user inside `/admin`. That sets `assigned_prog
 - `src/app/(app)/` — auth pages (log-in, sign-up, account). Gets `<Nav />` from its layout.
 - `src/app/dashboard/`, `src/app/dashboard/[program]/`, `src/app/workout/`, `src/app/admin/`, `src/app/coach/` — app pages at root level. Each imports `<DashboardNav />` directly.
 - `src/app/page.tsx` — public cover page. Uses `<LandingNav />`.
+
+## Future Features (not yet built)
+- **Workout Library** — completed workouts stay accessible for revisit (lifetime or additional subscription, TBD)
+- **Stripe paywall** — restrict program access based on purchase (currently all programs visible to all logged-in users)
+- **Voice notes** — text-only session notes for now; voice recording in Phase 2
