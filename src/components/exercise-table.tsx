@@ -48,14 +48,14 @@ export default function ExerciseTable({
 
   if (variant === 'ten-week') {
     return (
-      <div className="mb-8 overflow-x-auto rounded-2xl border border-white/10">
+      <div className="mb-8 overflow-x-auto rounded-2xl border border-black/10 dark:border-white/10">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/10 bg-white/5">
-              <th className="px-4 py-3 text-center font-semibold text-white/50">Done</th>
-              <th className="px-5 py-3 text-left font-semibold text-white/50">Exercise</th>
-              <th className="px-4 py-3 text-center font-semibold text-white/50">Sets / Reps</th>
-              <th className="px-4 py-3 text-center font-semibold text-white/50">Rest</th>
+            <tr className="border-b border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5">
+              <th className="px-3 py-3 sm:px-4 text-center font-semibold text-black/50 dark:text-white/50">Done</th>
+              <th className="px-3 py-3 sm:px-5 text-left font-semibold text-black/50 dark:text-white/50">Exercise</th>
+              <th className="px-3 py-3 sm:px-4 text-center font-semibold text-black/50 dark:text-white/50 whitespace-nowrap">Sets / Reps</th>
+              <th className="px-3 py-3 sm:px-4 text-center font-semibold text-black/50 dark:text-white/50">Rest</th>
             </tr>
           </thead>
           <tbody>
@@ -64,11 +64,11 @@ export default function ExerciseTable({
               return (
                 <tr
                   key={i}
-                  className={`border-b border-white/5 transition-colors ${
-                    isDone ? 'bg-accent/10' : i % 2 === 0 ? '' : 'bg-white/[0.02]'
+                  className={`border-b border-black/5 dark:border-white/5 transition-colors ${
+                    isDone ? 'bg-accent/10' : i % 2 === 0 ? '' : 'bg-black/[0.02] dark:bg-white/[0.02]'
                   }`}
                 >
-                  <td className="px-4 py-4 text-center">
+                  <td className="px-3 py-3 sm:px-4 sm:py-4 text-center">
                     <input
                       type="checkbox"
                       checked={isDone}
@@ -76,13 +76,13 @@ export default function ExerciseTable({
                       className="h-4 w-4 cursor-pointer accent-[#e5ab3a]"
                     />
                   </td>
-                  <td className={`px-5 py-4 font-medium transition-colors ${isDone ? 'text-white/30 line-through' : ''}`}>
+                  <td className={`px-3 py-3 sm:px-5 sm:py-4 font-medium transition-colors ${isDone ? 'text-black/30 dark:text-white/30 line-through' : ''}`}>
                     {ex.name}
                   </td>
-                  <td className="px-4 py-4 text-center text-white/70">
+                  <td className="px-3 py-3 sm:px-4 sm:py-4 text-center text-black/70 dark:text-white/70">
                     {ex.setsReps ?? '—'}
                   </td>
-                  <td className="px-4 py-4 text-center text-white/70">
+                  <td className="px-3 py-3 sm:px-4 sm:py-4 text-center text-black/70 dark:text-white/70 whitespace-nowrap">
                     {ex.setsReps ? (dayRest ?? '—') : '—'}
                   </td>
                 </tr>
@@ -95,15 +95,15 @@ export default function ExerciseTable({
   }
 
   return (
-    <div className="mb-8 overflow-x-auto rounded-2xl border border-white/10">
+    <div className="mb-8 overflow-x-auto rounded-2xl border border-black/10 dark:border-white/10">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-white/10 bg-white/5">
-            <th className="px-4 py-3 text-center font-semibold text-white/50">Done</th>
-            <th className="px-5 py-3 text-left font-semibold text-white/50">Exercise</th>
-            <th className="px-4 py-3 text-center font-semibold text-white/50">Sets</th>
-            <th className="px-4 py-3 text-center font-semibold text-white/50">Reps</th>
-            <th className="px-4 py-3 text-center font-semibold text-white/50">Rest</th>
+          <tr className="border-b border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5">
+            <th className="px-3 py-3 sm:px-4 text-center font-semibold text-black/50 dark:text-white/50">Done</th>
+            <th className="px-3 py-3 sm:px-5 text-left font-semibold text-black/50 dark:text-white/50">Exercise</th>
+            <th className="px-3 py-3 sm:px-4 text-center font-semibold text-black/50 dark:text-white/50">Sets</th>
+            <th className="px-3 py-3 sm:px-4 text-center font-semibold text-black/50 dark:text-white/50">Reps</th>
+            <th className="px-3 py-3 sm:px-4 text-center font-semibold text-black/50 dark:text-white/50">Rest</th>
           </tr>
         </thead>
         <tbody>
@@ -112,11 +112,11 @@ export default function ExerciseTable({
             return (
               <tr
                 key={ex.name}
-                className={`border-b border-white/5 transition-colors ${
-                  isDone ? 'bg-accent/10' : i % 2 === 0 ? '' : 'bg-white/[0.02]'
+                className={`border-b border-black/5 dark:border-white/5 transition-colors ${
+                  isDone ? 'bg-accent/10' : i % 2 === 0 ? '' : 'bg-black/[0.02] dark:bg-white/[0.02]'
                 }`}
               >
-                <td className="px-4 py-4 text-center">
+                <td className="px-3 py-3 sm:px-4 sm:py-4 text-center">
                   <input
                     type="checkbox"
                     checked={isDone}
@@ -124,12 +124,12 @@ export default function ExerciseTable({
                     className="h-4 w-4 cursor-pointer accent-[#e5ab3a]"
                   />
                 </td>
-                <td className={`px-5 py-4 font-medium transition-colors ${isDone ? 'text-white/30 line-through' : ''}`}>
+                <td className={`px-3 py-3 sm:px-5 sm:py-4 font-medium transition-colors ${isDone ? 'text-black/30 dark:text-white/30 line-through' : ''}`}>
                   {ex.name}
                 </td>
-                <td className="px-4 py-4 text-center text-white/70">{ex.sets}</td>
-                <td className="px-4 py-4 text-center text-white/70">{ex.reps}</td>
-                <td className="px-4 py-4 text-center text-white/70">{ex.rest}</td>
+                <td className="px-3 py-3 sm:px-4 sm:py-4 text-center text-black/70 dark:text-white/70">{ex.sets}</td>
+                <td className="px-3 py-3 sm:px-4 sm:py-4 text-center text-black/70 dark:text-white/70">{ex.reps}</td>
+                <td className="px-3 py-3 sm:px-4 sm:py-4 text-center text-black/70 dark:text-white/70">{ex.rest}</td>
               </tr>
             )
           })}

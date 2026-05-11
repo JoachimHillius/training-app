@@ -48,7 +48,7 @@ export default async function DashboardPage({
   const isAdmin = user.email === process.env.ADMIN_EMAIL
 
   return (
-    <div className="min-h-screen bg-dark-bg text-white">
+    <div className="min-h-screen">
       <DashboardNav email={user.email ?? ''} isAdmin={isAdmin} />
 
       <div className="mx-auto max-w-5xl px-6 py-12 sm:px-10">
@@ -66,7 +66,7 @@ export default async function DashboardPage({
           <h1 className="mt-2 font-display text-5xl uppercase tracking-tight">
             Select Your Training Plan
           </h1>
-          <p className="mt-2 text-white/50">{user.email}</p>
+          <p className="mt-2 text-black/50 dark:text-white/50">{user.email}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -74,7 +74,7 @@ export default async function DashboardPage({
             <Link
               key={card.value}
               href={`/dashboard/${card.value}`}
-              className="group flex flex-col rounded-2xl border border-white/10 bg-white/5 p-6 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/5"
+              className="group flex flex-col rounded-2xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-6 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/5"
             >
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
                 {card.weeks} weeks
@@ -82,7 +82,7 @@ export default async function DashboardPage({
               <h2 className="mt-3 font-display text-2xl uppercase leading-none tracking-tight">
                 {card.name}
               </h2>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-white/50">
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-black/50 dark:text-white/50">
                 {card.description}
               </p>
               <span className="mt-6 text-sm font-semibold text-accent transition-colors group-hover:text-accent/80">

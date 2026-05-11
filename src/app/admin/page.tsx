@@ -45,7 +45,7 @@ export default async function AdminPage({
   }))
 
   return (
-    <div className="min-h-screen bg-dark-bg text-white">
+    <div className="min-h-screen">
       <DashboardNav email={user.email ?? ''} isAdmin={true} />
 
       <div className="mx-auto max-w-4xl px-6 py-12 sm:px-10">
@@ -83,13 +83,13 @@ export default async function AdminPage({
               <form
                 key={row.id}
                 action={assignProgram}
-                className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 sm:flex-row sm:items-center"
+                className="flex flex-col gap-4 rounded-2xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-5 sm:flex-row sm:items-center"
               >
                 <input type="hidden" name="user_id" value={row.id} />
 
                 <div className="flex-1 min-w-0">
                   <p className="truncate text-sm font-medium">{row.email}</p>
-                  <p className="mt-0.5 text-xs text-white/30">
+                  <p className="mt-0.5 text-xs text-black/40 dark:text-white/30">
                     {profile
                       ? profile.assigned_program
                         ? `Week ${profile.current_week} (${daysCompleted}/7 days done) · ${profile.assigned_program}`
@@ -102,7 +102,7 @@ export default async function AdminPage({
                   <select
                     name="assigned_program"
                     defaultValue={profile?.assigned_program ?? ''}
-                    className="rounded-xl border border-white/20 bg-dark-bg px-3 py-2 text-sm text-white focus:border-accent focus:outline-none"
+                    className="rounded-xl border border-black/20 dark:border-white/20 bg-white dark:bg-dark-bg px-3 py-2 text-sm focus:border-accent focus:outline-none"
                   >
                     <option value="">No program</option>
                     {PROGRAM_OPTIONS.map((opt) => (
@@ -120,7 +120,7 @@ export default async function AdminPage({
                       min={1}
                       max={24}
                       defaultValue={profile?.current_week ?? 1}
-                      className="w-16 rounded-xl border border-white/20 bg-dark-bg px-3 py-2 text-sm text-white focus:border-accent focus:outline-none"
+                      className="w-16 rounded-xl border border-black/20 dark:border-white/20 bg-white dark:bg-dark-bg px-3 py-2 text-sm focus:border-accent focus:outline-none"
                     />
                   </div>
 

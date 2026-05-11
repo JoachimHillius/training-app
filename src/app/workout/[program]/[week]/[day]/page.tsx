@@ -50,7 +50,7 @@ export default async function WorkoutDayPage({
   const isCompleted = !!completion
 
   return (
-    <div className="min-h-screen bg-dark-bg text-white">
+    <div className="min-h-screen">
       <DashboardNav email={user.email ?? ''} isAdmin={isAdmin} />
 
       <div className="mx-auto max-w-3xl px-6 py-12 sm:px-10">
@@ -82,10 +82,10 @@ export default async function WorkoutDayPage({
               Day {dayNum}
             </h1>
             {tenWeekDay?.dayName && (
-              <p className="mt-1 text-sm text-white/40">{tenWeekDay.dayName}</p>
+              <p className="mt-1 text-sm text-black/40 dark:text-white/40">{tenWeekDay.dayName}</p>
             )}
             {!isRestDay && tenWeekDay && (
-              <p className="mt-2 text-lg font-semibold text-white">{tenWeekDay.focus}</p>
+              <p className="mt-2 text-lg font-semibold">{tenWeekDay.focus}</p>
             )}
             {isCompleted && (
               <p className="mt-2 text-sm font-medium text-accent">✓ Completed</p>
@@ -93,7 +93,7 @@ export default async function WorkoutDayPage({
           </div>
         ) : (
           <div className="mb-8">
-            <div className="flex flex-wrap items-center gap-3 text-sm text-white/40">
+            <div className="flex flex-wrap items-center gap-3 text-sm text-black/40 dark:text-white/40">
               <span>{programMeta?.label ?? program}</span>
               <span>·</span>
               <span>Week {weekNum}</span>
@@ -111,7 +111,7 @@ export default async function WorkoutDayPage({
 
         {/* Rest day message */}
         {isRestDay ? (
-          <div className="mb-8 rounded-2xl border border-white/10 bg-white/5 p-6 text-white/70">
+          <div className="mb-8 rounded-2xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-6 text-black/70 dark:text-white/70">
             <p className="text-lg font-medium">Rest day.</p>
             <p className="mt-2 text-sm">
               {isTenWeek && tenWeekDay?.notes
@@ -143,21 +143,21 @@ export default async function WorkoutDayPage({
 
             {/* Conditioning block (10_week only) */}
             {isTenWeek && tenWeekDay?.conditioning && (
-              <div className="mb-4 rounded-xl border border-white/10 bg-white/5 px-5 py-4">
+              <div className="mb-4 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 px-5 py-4">
                 <p className="mb-2 font-display text-sm uppercase tracking-[0.2em] text-accent">
                   Conditioning
                 </p>
-                <p className="text-sm text-white/80">{tenWeekDay.conditioning}</p>
+                <p className="text-sm text-black/80 dark:text-white/80">{tenWeekDay.conditioning}</p>
               </div>
             )}
 
             {/* Execution notes (10_week only) */}
             {isTenWeek && tenWeekDay?.notes && (
-              <div className="mb-8 rounded-xl border border-white/10 bg-white/5 px-5 py-4">
+              <div className="mb-8 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 px-5 py-4">
                 <p className="mb-2 font-display text-sm uppercase tracking-[0.2em] text-accent">
                   Execution Notes
                 </p>
-                <p className="text-sm italic text-white/60">{tenWeekDay.notes}</p>
+                <p className="text-sm italic text-black/60 dark:text-white/60">{tenWeekDay.notes}</p>
               </div>
             )}
           </>
@@ -172,7 +172,7 @@ export default async function WorkoutDayPage({
           <div>
             <label
               htmlFor="notes_text"
-              className="mb-2 block text-sm font-semibold uppercase tracking-widest text-white/50"
+              className="mb-2 block text-sm font-semibold uppercase tracking-widest text-black/50 dark:text-white/50"
             >
               Session Notes
             </label>
@@ -182,7 +182,7 @@ export default async function WorkoutDayPage({
               rows={4}
               defaultValue={completion?.notes_text ?? ''}
               placeholder="How did it feel? Any PRs, issues, or adjustments…"
-              className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm placeholder-white/20 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+              className="w-full rounded-xl border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 px-4 py-3 text-sm placeholder-black/20 dark:placeholder-white/20 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
             />
           </div>
 

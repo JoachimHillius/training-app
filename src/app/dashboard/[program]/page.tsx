@@ -100,7 +100,7 @@ export default async function ProgramDashboardPage({
   })
 
   return (
-    <div className="min-h-screen bg-dark-bg text-white">
+    <div className="min-h-screen">
       <DashboardNav email={user.email ?? ''} isAdmin={isAdmin} />
 
       <div className="mx-auto max-w-5xl px-6 py-12 sm:px-10">

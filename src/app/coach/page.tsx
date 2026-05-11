@@ -11,17 +11,17 @@ const stats = [
 
 const programs = [
   {
-    name: '10 Week Foundation',
+    name: '10 Week Training',
     description:
       'Entry point for new athletes. Builds grip, hip power, and body awareness through structured daily sessions.',
   },
   {
-    name: '3 Month Builder',
+    name: '3 Month Training',
     description:
       'Periodized into three phases — accumulation, intensification, realization. Built for athletes with a base.',
   },
   {
-    name: '6 Month Elite',
+    name: '6 Month Training',
     description:
       'Full competition-season preparation. Peaks you for target events with planned deload weeks.',
   },
@@ -49,7 +49,7 @@ export default async function CoachPage() {
   const isAdmin = user.email === process.env.ADMIN_EMAIL
 
   return (
-    <div className="min-h-screen bg-dark-bg text-white">
+    <div className="min-h-screen">
       <DashboardNav email={user.email ?? ''} isAdmin={isAdmin} />
 
       <div className="mx-auto max-w-5xl px-6 py-12 sm:px-10">
@@ -80,23 +80,23 @@ export default async function CoachPage() {
             <h2 className="font-display text-4xl uppercase tracking-tight">
               Pascal Isabelle
             </h2>
-            <p className="mt-1 font-medium text-white/50">
+            <p className="mt-1 font-medium text-black/50 dark:text-white/50">
               Professional Bareback Rider · Coach · Quebec, Canada
             </p>
 
             <div className="mt-6 space-y-4">
               {bio.map((paragraph, i) => (
-                <p key={i} className="text-base leading-relaxed text-white/70">
+                <p key={i} className="text-base leading-relaxed text-black/70 dark:text-white/70">
                   {paragraph}
                 </p>
               ))}
             </div>
 
-            <div className="mt-10 grid grid-cols-3 gap-4 border-t border-white/10 pt-10">
+            <div className="mt-10 grid grid-cols-3 gap-4 border-t border-black/10 dark:border-white/10 pt-10">
               {stats.map((stat) => (
                 <div key={stat.label}>
                   <div className="text-3xl font-bold text-accent">{stat.value}</div>
-                  <div className="mt-1 text-xs text-white/50">{stat.label}</div>
+                  <div className="mt-1 text-xs text-black/50 dark:text-white/50">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -119,12 +119,12 @@ export default async function CoachPage() {
             {programs.map((p) => (
               <div
                 key={p.name}
-                className="rounded-2xl border border-white/10 bg-white/5 p-6"
+                className="rounded-2xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-6"
               >
                 <h3 className="font-display text-xl uppercase tracking-tight text-accent">
                   {p.name}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/60">
+                <p className="mt-2 text-sm leading-relaxed text-black/60 dark:text-white/60">
                   {p.description}
                 </p>
               </div>

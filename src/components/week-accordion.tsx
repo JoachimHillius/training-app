@@ -51,10 +51,10 @@ export default function WeekAccordion({ weeks, program, currentWeek }: WeekAccor
               week.isCurrent && !week.isCompleted
                 ? 'border-accent/40 bg-accent/5'
                 : week.isCompleted
-                  ? 'border-white/10 bg-white/5'
+                  ? 'border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5'
                   : week.isUnlocked
-                    ? 'border-white/10 bg-white/5'
-                    : 'border-white/5 bg-white/[0.02] opacity-50'
+                    ? 'border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5'
+                    : 'border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] opacity-50'
             }`}
           >
             {/* Header row */}
@@ -73,13 +73,15 @@ export default function WeekAccordion({ weeks, program, currentWeek }: WeekAccor
                     Week {week.weekNumber}
                   </span>
                   {week.title && (
-                    <span className="text-sm text-white/40 truncate">{week.title}</span>
+                    <span className="text-sm text-black/40 dark:text-white/40 truncate">
+                      {week.title}
+                    </span>
                   )}
                 </div>
               </div>
 
               {/* Right: status + chevron */}
-              <div className="flex items-center gap-3 shrink-0">
+              <div className="flex items-center gap-2 shrink-0">
                 {week.isCompleted && (
                   <span className="text-xs font-semibold uppercase tracking-wider text-accent">
                     ✓ Done
@@ -91,13 +93,16 @@ export default function WeekAccordion({ weeks, program, currentWeek }: WeekAccor
                   </span>
                 )}
                 {!week.isUnlocked && (
-                  <span className="text-xs text-white/30">
-                    🔒 Complete Week {week.weekNumber - 1} to unlock
+                  <span className="text-xs text-black/30 dark:text-white/30">
+                    🔒{' '}
+                    <span className="hidden sm:inline">
+                      Complete Week {week.weekNumber - 1} to unlock
+                    </span>
                   </span>
                 )}
                 {week.isUnlocked && (
                   <span
-                    className={`text-white/40 text-sm transition-transform duration-200 ${
+                    className={`text-black/40 dark:text-white/40 text-sm transition-transform duration-200 ${
                       isOpen ? 'rotate-180' : ''
                     }`}
                     style={{ display: 'inline-block' }}
@@ -111,7 +116,7 @@ export default function WeekAccordion({ weeks, program, currentWeek }: WeekAccor
             {/* Expanded content: 7-day grid */}
             {isOpen && week.isUnlocked && (
               <div className="px-5 pb-5">
-                <div className="mb-4 h-px bg-white/10" />
+                <div className="mb-4 h-px bg-black/10 dark:bg-white/10" />
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
                   {week.days.map((day) => (
                     <Link
@@ -121,12 +126,12 @@ export default function WeekAccordion({ weeks, program, currentWeek }: WeekAccor
                         day.isCompleted
                           ? 'border-accent/40 bg-accent/10'
                           : day.isRest
-                            ? 'border-white/10 bg-white/5 opacity-70'
-                            : 'border-white/10 bg-white/5 hover:border-white/20'
+                            ? 'border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 opacity-70'
+                            : 'border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 hover:border-black/20 dark:hover:border-white/20'
                       }`}
                     >
                       <div className="mb-2 flex items-center justify-between">
-                        <span className="text-xs font-bold uppercase tracking-widest text-white/40">
+                        <span className="text-xs font-bold uppercase tracking-widest text-black/40 dark:text-white/40">
                           {day.dayName.slice(0, 3)}
                         </span>
                         {day.isCompleted && (
@@ -134,7 +139,9 @@ export default function WeekAccordion({ weeks, program, currentWeek }: WeekAccor
                         )}
                       </div>
                       <p className="text-sm font-semibold leading-snug">{day.label}</p>
-                      <p className="mt-auto pt-3 text-xs text-white/30">Day {day.dayNumber}</p>
+                      <p className="mt-auto pt-3 text-xs text-black/30 dark:text-white/30">
+                        Day {day.dayNumber}
+                      </p>
                     </Link>
                   ))}
                 </div>
