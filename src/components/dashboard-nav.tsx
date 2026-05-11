@@ -2,9 +2,10 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signOut } from '@/app/actions/auth'
 import ThemeToggle from './theme-toggle'
+import { SOUND_PRESETS, SOUND_STORAGE_KEY, type SoundPreset } from '@/lib/workout-sounds'
 
 export default function DashboardNav({
   email,
@@ -14,6 +15,17 @@ export default function DashboardNav({
   isAdmin: boolean
 }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [sound, setSound] = useState<SoundPreset>('bell')
+
+  useEffect(() => {
+    const saved = localStorage.getItem(SOUND_STORAGE_KEY) as SoundPreset | null
+    if (saved) setSound(saved)
+  }, [])
+
+  function handleSoundChange(preset: SoundPreset) {
+    setSound(preset)
+    localStorage.setItem(SOUND_STORAGE_KEY, preset)
+  }
 
   return (
     <nav className="sticky top-0 z-30 border-b border-black/10 dark:border-white/10 bg-white/95 dark:bg-dark-bg/90 backdrop-blur-sm px-6 sm:px-10">
@@ -22,7 +34,7 @@ export default function DashboardNav({
         <div className="flex items-center gap-8">
           <Link href="/">
             <Image
-              src="/logo.png"
+              src="/NEw_ProGrip_JP_Logo.png"
               alt="ProGrip JP"
               width={100}
               height={34}
@@ -56,6 +68,18 @@ export default function DashboardNav({
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
+          <select
+            value={sound}
+            onChange={(e) => handleSoundChange(e.target.value as SoundPreset)}
+            className="hidden md:block rounded-lg border border-black/20 dark:border-white/20 bg-transparent px-2 py-1 text-xs text-black/60 dark:text-white/60 focus:outline-none focus:border-accent"
+            title="Timer sound"
+          >
+            {SOUND_PRESETS.map((p) => (
+              <option key={p.value} value={p.value} className="bg-white dark:bg-dark-bg">
+                {p.label}
+              </option>
+            ))}
+          </select>
           <span className="hidden max-w-[160px] truncate text-sm text-black/40 dark:text-white/40 sm:inline">
             {email}
           </span>
@@ -121,6 +145,20 @@ export default function DashboardNav({
               </Link>
             )}
             <p className="text-sm text-black/40 dark:text-white/40">{email}</p>
+            <div className="flex items-center gap-2">
+              <label className="text-xs text-black/40 dark:text-white/40">Timer sound</label>
+              <select
+                value={sound}
+                onChange={(e) => handleSoundChange(e.target.value as SoundPreset)}
+                className="rounded-lg border border-black/20 dark:border-white/20 bg-transparent px-2 py-1 text-xs text-black/60 dark:text-white/60 focus:outline-none focus:border-accent"
+              >
+                {SOUND_PRESETS.map((p) => (
+                  <option key={p.value} value={p.value} className="bg-white dark:bg-dark-bg">
+                    {p.label}
+                  </option>
+                ))}
+              </select>
+            </div>
             <form action={signOut}>
               <button
                 type="submit"

@@ -7,7 +7,7 @@ export default function LandingNav() {
     <nav className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-8 py-6">
       <Link href="/" className="flex items-center">
         <Image
-          src="/logo.png"
+          src="/NEw_ProGrip_JP_Logo.png"
           alt="ProGrip JP"
           width={120}
           height={40}
